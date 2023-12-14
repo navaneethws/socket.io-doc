@@ -28,7 +28,9 @@ io.on('connection', (socket) => {   //This line is an event listener for the 'co
     socket.on('chat message', (msg) => {    // This event is triggered when a client sends a 'chat message' event to the server.
                                             // The provided callback function is executed when the 'chat message' event occurs.
                                             
-        console.log('message: ' + msg);
+        // console.log('message: ' + msg); // to view the chat message in console
+
+        io.emit('chat message', msg);
     });
 });
 

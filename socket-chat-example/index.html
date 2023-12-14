@@ -77,6 +77,7 @@
 
         const form = document.getElementById('form');
         const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
 
         form.addEventListener('submit', (e) => {    //adds an event listener to the form for the 'submit' event. When the form is submitted the provided callback function is executed.
             e.preventDefault();
@@ -86,6 +87,15 @@
                 input.value = '';
             }
         });
+
+        socket.on('chat message', (msg) => {    // message sen cheyyumbo trigger aakunna event
+
+            const item = document.createElement('li');  // creating li element
+            item.textContent = msg; // giving message(ie: msg) from server side to inside of li
+            messages.appendChild(item); //  appending li element to ul tag(ie: messages)
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
     </script>
 </body>
 

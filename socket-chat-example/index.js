@@ -20,20 +20,78 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {   //This line is an event listener for the 'connection' event. The 'connection' event is fired whenever a new client connects to the Socket.IO server.
                                     // callback function is executed and recieves a 'socket-(represents the connection to the specific client)' object when new connection is established
 
+
+
     // console.log('a user connected');    //This block of code listens for the 'connection' event, which is triggered whenever a client successfully connects to the server through Socket.IO.
     // socket.on('disconnect', () => {
     //     console.log('user disconnected');   //This event is triggered when a client disconnects from the server, either intentionally (closing the browser tab or navigating away) or due to a network issue.
     // });
+
+
 
     socket.on('chat message', (msg) => {    // This event is triggered when a client sends a 'chat message' event to the server.
                                             // The provided callback function is executed when the 'chat message' event occurs.
                                             
         // console.log('message: ' + msg); // to view the chat message in console
 
-        io.emit('chat message', msg);
+        io.emit('chat message', msg);   //  ith cheythal ethra socket indo avarkk okke pokum sender adakkam
+
+        socket.broadcast.emit('chat message', msg); //  ith use cheythal sender kk varilla bakki ella socket(or receiver) nu pokum
     });
+
+
+
+    // socket.on('hello', (arg1, arg2, arg3) => {   // Basic Emit  =>  client -> server is working & showing output 
+    //     console.log(arg1); // 1
+    //     console.log(arg2); // '2'
+    //     console.log(arg3); // { 3: '4', 5: <Buffer 06> }
+    // });  
+
+
+    
+    // socket.emit('hello', 1, '2', { 3: '4', 5: Buffer.from([6]) }); // Basic Emit  =>  server -> client is not working & not showing output 
+
+
+
+    // socket.emit('hello', 'world');   // Basic Emit  =>  server -> client is not working & not showing output 
+
+
+    // socket.on('request', (arg1, arg2, callback) => {    // Acknowledgement  =>  client -> server is working & showing output 
+    //     console.log(arg1); // { foo: 'bar' }
+    //     console.log(arg2); // 'baz'
+    //     callback({
+    //         status: 'ok'
+    //     });
+    // });
+
+
+    // socket.timeout(5000).emit('request', { foo: 'bar' }, 'baz', (err, response) => {    //  Acknowledgement  =>  server -> client acknowledgement callback is working & not showing output 
+    //     if (err) {
+    //       // the client did not acknowledge the event in the given delay
+    //     } else {
+    //       console.log(response.status); // 'ok'
+    //     }
+    // });
+
+
+    // socket.on('request', (arg1, arg2, callback) => {
+    //     console.log(arg1); // { foo: 'bar' }
+    //     console.log(arg2); // 'baz'
+    //     callback({
+    //       status: 'ok'
+    //     });
+    // });
 });
 
-server.listen(3000, () => {
-    console.log('server running at http://localhost:3000');  // starts the HTTP server to listen on port 3000
+io.on('connection', async (socket) => {
+    try {
+      const response = await socket.timeout(5000).emitWithAck('request', { foo: 'bar' }, 'baz');
+      console.log(response.status); // 'ok'
+    } catch (e) {
+      // the client did not acknowledge the event in the given delay
+    }
+  });
+
+server.listen(5000, () => {
+    console.log('server running at http://localhost:5000');  // starts the HTTP server to listen on port 3000
 })

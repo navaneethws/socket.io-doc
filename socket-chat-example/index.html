@@ -88,12 +88,63 @@
             }
         });
 
-        socket.on('chat message', (msg) => {    // message sen cheyyumbo trigger aakunna event
+        socket.on('chat message', (msg) => {    // message send cheyyumbo trigger aakunna event
 
             const item = document.createElement('li');  // creating li element
             item.textContent = msg; // giving message(ie: msg) from server side to inside of li
             messages.appendChild(item); //  appending li element to ul tag(ie: messages)
             window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
+
+        // socket.emit('hello', 1, '2', { 3: '4', 5: Uint8Array.from([6]) });   // Basic Emit  =>  client -> server is working & showing output 
+
+
+
+        // socket.on('hello', (arg1, arg2, arg3) => {   // Basic Emit  =>  server -> client is not working & not showing output 
+        //     console.log(arg1); // 1
+        //     console.log(arg2); // '2'
+        //     console.log(arg3); // { 3: '4', 5: ArrayBuffer (1) [ 6 ] }
+        // });
+
+        
+
+        // socket.on('hello', (arg) => {   // Basic Emit  =>  server -> client is not working & not showing output 
+        //     console.log(arg); // 'world'
+        // });
+
+
+        // socket.timeout(5000).emit('request', { foo: 'bar' }, 'baz', (err, response) => {    // Acknowledgement  =>  client -> server is working & showing output 
+        //     // if (err) {
+        //     //     // the server did not acknowledge the event in the given delay
+        //     // } else {
+        //     //     console.log(response.status); // 'ok'
+        //     // }
+
+        //     try {
+        //         const response = socket.timeout(5000).emitWithAck('request', { foo: 'bar' }, 'baz');
+        //         console.log(response.status); // 'ok'
+        //     } catch (e) {
+        //         // the server did not acknowledge the event in the given delay
+        //     }
+        // });
+
+        // socket.on('request', (arg1, arg2, callback) => {    //  Acknowledgement  =>  server -> client acknowledgement callback is working & not showing output 
+        //     console.log(arg1); // { foo: 'bar' }
+        //     console.log(arg2); // 'baz'
+        //     callback({
+        //         status: 'ok'
+        //     });
+        // });
+
+
+        socket.on('request', (arg1, arg2, callback) => {
+            console.log(arg1); // { foo: 'bar' }
+            console.log(arg2); // 'baz'
+            callback({
+                status: 'ok'
+            });
         });
 
     </script>
